@@ -15,6 +15,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Windows.ApplicationModel.AppService;
+using Windows.ApplicationModel.Background;
+
 namespace app_uwp
 {
     /// <summary>
@@ -96,5 +99,53 @@ namespace app_uwp
             //TODO: アプリケーションの状態を保存してバックグラウンドの動作があれば停止します
             deferral.Complete();
         }
+
+
+
+        //追加
+        private AppServiceConnection _appServiceConnection;
+        private BackgroundTaskDeferral _appServiceDeferral;
+
+        protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
+        {
+            base.OnBackgroundActivated(args);
+
+            if (args.TaskInstance.TriggerDetails is AppServiceTriggerDetails appService)
+            {
+                _appServiceDeferral = args.TaskInstance.GetDeferral();
+                args.TaskInstance.Canceled += TaskInstance_Canceled;
+                _appServiceConnection = appService.AppServiceConnection;
+                _appServiceConnection.RequestReceived += AppServiceConnection_RequestReceived;
+                _appServiceConnection.ServiceClosed += AppServiceConnection_ServiceClosed;
+            }
+        }
+
+        private void AppServiceConnection_ServiceClosed(AppServiceConnection sender, AppServiceClosedEventArgs args)
+        {
+            _appServiceDeferral?.Complete();
+        }
+
+        private async void AppServiceConnection_RequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
+        {
+            var d = args.GetDeferral();
+
+            var message = args.Request.Message;
+            var input = message["Input"] as string;
+
+            await MainPage.Current?.SetTextAsync(input);
+            await args.Request.SendResponseAsync(new ValueSet
+            {
+                ["Result"] = $"Accept: {DateTime.Now}"
+            });
+            d.Complete();
+        }
+
+        private void TaskInstance_Canceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
+        {
+            _appServiceDeferral?.Complete();
+        }
+
+
+
     }
 }

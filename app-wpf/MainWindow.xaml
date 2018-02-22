@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:app_wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+    <StackPanel>
+        <TextBox x:Name="inputTextBox" />
+        <Button Content="Send"
+                Click="Button_Click" />
+        <TextBlock x:Name="logTextBlock" />
+    </StackPanel>
 </Window>

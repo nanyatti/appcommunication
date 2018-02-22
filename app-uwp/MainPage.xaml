@@ -10,6 +10,11 @@
     Height="320">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button Content="Launch" Click="Button_Click" />
+        <TextBlock x:Name="textBlock"
+                   Style="{ThemeResource HeaderTextBlockStyle}" />
+        <Button Content="Launch"
+                Click="Button_Click" 
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
     </Grid>
 </Page>
