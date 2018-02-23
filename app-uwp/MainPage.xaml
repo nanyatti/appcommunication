@@ -16,5 +16,9 @@
                 Click="Button_Click" 
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"/>
+        <Button Content="Send now"
+                Click="Button_Click2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom" />
     </Grid>
 </Page>

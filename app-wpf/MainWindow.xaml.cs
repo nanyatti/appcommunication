@@ -39,6 +39,7 @@ namespace app_wpf
                 _appServiceConnection = new AppServiceConnection();
                 _appServiceConnection.AppServiceName = "CommunicationService";
                 _appServiceConnection.PackageFamilyName = Package.Current.Id.FamilyName;
+                _appServiceConnection.RequestReceived += AppServiceConnection_RequestReceived;
                 var r = await _appServiceConnection.OpenAsync();
                 if (r != AppServiceConnectionStatus.Success)
                 {
@@ -53,6 +54,23 @@ namespace app_wpf
                 ["Input"] = inputTextBox.Text,
             });
             logTextBlock.Text = res.Message["Result"] as string;
+        }
+
+        private void AppServiceConnection_RequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
+        {
+            void setText()
+            {
+                logTextBlock.Text = (string)args.Request.Message["Now"];
+            }
+
+            if (Dispatcher.CheckAccess())
+            {
+                setText();
+            }
+            else
+            {
+                Dispatcher.Invoke(() => setText());
+            }
         }
     }
 }

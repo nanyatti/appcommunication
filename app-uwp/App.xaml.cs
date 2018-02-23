@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using System.Threading.Tasks;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
 
@@ -103,8 +104,22 @@ namespace app_uwp
 
 
         //追加
+        public static new App Current => (App)Application.Current;
         private AppServiceConnection _appServiceConnection;
         private BackgroundTaskDeferral _appServiceDeferral;
+
+        public async Task SendNowAsync()
+        {
+            if (_appServiceConnection == null)
+            {
+                return;
+            }
+
+            await _appServiceConnection.SendMessageAsync(new ValueSet
+            {
+                ["Now"] = DateTime.Now.ToString(),
+            });
+        }
 
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
         {

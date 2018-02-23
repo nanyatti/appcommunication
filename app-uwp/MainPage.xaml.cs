@@ -65,5 +65,10 @@ namespace app_uwp
                 });
             }
         }
+
+        private async void Button_Click2(object sender, RoutedEventArgs e)
+        {
+            await App.Current.SendNowAsync();
+        }
     }
 }
