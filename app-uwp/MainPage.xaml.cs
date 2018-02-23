@@ -70,5 +70,10 @@ namespace app_uwp
         {
             await App.Current.SendNowAsync();
         }
+
+        public string GetText()
+        {
+            return InputTextBox.Text;
+        }
     }
 }

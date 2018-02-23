@@ -118,6 +118,7 @@ namespace app_uwp
             await _appServiceConnection.SendMessageAsync(new ValueSet
             {
                 ["Now"] = DateTime.Now.ToString(),
+                ["Input"] = MainPage.Current.GetText(),
             });
         }
 

@@ -5,11 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:app_wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <StackPanel>
-        <TextBox x:Name="inputTextBox" />
+        Title="MainWindow" Height="350" Width="525"
+        Loaded="Window_Loaded">
+    <Grid>
+        <TextBlock x:Name="textBlock" Margin="0,0,0,150" FontFamily="Segoe UI" FontSize="46"/>
+        <TextBox x:Name="inputTextBox" Margin="0,180,0,90" FontFamily="Segoe UI" FontSize="15"/>
+        <TextBlock x:Name="logTextBlock" Margin="0,240,0,30" FontFamily="Segoe UI" FontSize="15"/>
         <Button Content="Send"
-                Click="Button_Click" />
-        <TextBlock x:Name="logTextBlock" />
-    </StackPanel>
+                Click="Button_Click"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom" FontFamily="Segoe UI" FontSize="15"/>
+    </Grid>
 </Window>

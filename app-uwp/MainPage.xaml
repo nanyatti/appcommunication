@@ -10,13 +10,14 @@
     Height="320">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock x:Name="textBlock"
-                   Style="{ThemeResource HeaderTextBlockStyle}" />
         <Button Content="Launch"
                 Click="Button_Click" 
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"/>
-        <Button Content="Send now"
+                VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlock" 
+                   Style="{ThemeResource HeaderTextBlockStyle}" Margin="0,50,0,100"/>
+        <TextBox x:Name="InputTextBox" Margin="0,230,0,40"/>
+        <Button Content="Send"
                 Click="Button_Click2"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom" />

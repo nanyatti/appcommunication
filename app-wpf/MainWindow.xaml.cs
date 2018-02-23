@@ -32,27 +32,41 @@ namespace app_wpf
 
         private AppServiceConnection _appServiceConnection;
 
+        private async Task<bool> ConnectAsync()
+        {
+            if (_appServiceConnection != null)
+            {
+                return true;
+            }
+
+            var appServiceConnection = new AppServiceConnection
+            {
+                AppServiceName = "CommunicationService",
+                PackageFamilyName = Package.Current.Id.FamilyName
+            };
+            appServiceConnection.RequestReceived += AppServiceConnection_RequestReceived;
+            var r = await appServiceConnection.OpenAsync() == AppServiceConnectionStatus.Success;
+            if (r)
+            {
+                _appServiceConnection = appServiceConnection;
+            }
+
+            return r;
+        }
+
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (_appServiceConnection == null)
+            if (!(await ConnectAsync()))
             {
-                _appServiceConnection = new AppServiceConnection();
-                _appServiceConnection.AppServiceName = "CommunicationService";
-                _appServiceConnection.PackageFamilyName = Package.Current.Id.FamilyName;
-                _appServiceConnection.RequestReceived += AppServiceConnection_RequestReceived;
-                var r = await _appServiceConnection.OpenAsync();
-                if (r != AppServiceConnectionStatus.Success)
-                {
-                    MessageBox.Show($"Failed: {r}");
-                    _appServiceConnection = null;
-                    return;
-                }
+                MessageBox.Show($"Failed");
+                return;
             }
 
             var res = await _appServiceConnection.SendMessageAsync(new ValueSet
             {
                 ["Input"] = inputTextBox.Text,
             });
+
             logTextBlock.Text = res.Message["Result"] as string;
         }
 
@@ -60,6 +74,7 @@ namespace app_wpf
         {
             void setText()
             {
+                textBlock.Text = (string)args.Request.Message["Input"];
                 logTextBlock.Text = (string)args.Request.Message["Now"];
             }
 
@@ -71,6 +86,11 @@ namespace app_wpf
             {
                 Dispatcher.Invoke(() => setText());
             }
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            await ConnectAsync();
         }
     }
 }
